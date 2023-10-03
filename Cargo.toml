@@ -6,5 +6,10 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.6.20"
+anyhow = "1.0.75"
+axum = { version = "0.6.20", features = ["ws"] }
+futures-util = "0.3.28"
+hyper = "0.14.27"
+pty-process = { version = "0.4.0", features = ["async"] }
 tokio = { version = "1.32.0", features = ["full"] }
+tower-http = { version = "0.4.4", features = ["fs"] }
