@@ -10,7 +10,7 @@ use futures_util::{sink::SinkExt, stream::StreamExt};
 // use anyhow::Error;
 use tokio::io::{AsyncReadExt, AsyncWrite, AsyncWriteExt};
 
-use crate::adapter::LocalShell;
+use crate::adapter::{LocalShell, ResizablePty};
 
 pub async fn ws_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
     ws.on_upgrade(handle_socket)

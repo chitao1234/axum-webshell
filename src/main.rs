@@ -1,4 +1,5 @@
 #![feature(async_fn_in_trait)]
+#![recursion_limit = "102400"]
 mod adapter;
 mod handler;
 
@@ -12,8 +13,9 @@ use handler::ws_handler;
 #[tokio::main]
 async fn main() {
     let app = Router::new()
-        .nest_service("/", ServeDir::new("html"))
-        .route("/ws", get(ws_handler));
+        .nest_service("/", ServeDir::new("html/dist"))
+        .route("/ws", get(ws_handler))
+        .route("/control", get(ws_handler));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], 8000));
     println!("listening on {}", addr);
