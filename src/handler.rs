@@ -13,11 +13,19 @@ use tokio::io::{AsyncReadExt, AsyncWrite, AsyncWriteExt};
 use crate::adapter::{LocalShell, ResizablePty};
 
 pub async fn ws_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
-    ws.on_upgrade(handle_socket)
+    ws.on_upgrade(|socket| {
+        let pty = LocalShell::new("sh").unwrap();
+        handle_socket(pty, socket)
+    })
 }
 
-async fn handle_socket(socket: WebSocket) {
-    let (mut reader, mut writer) = LocalShell::new("sh").unwrap().into_split();
+async fn handle_socket<T>(pty: T, socket: WebSocket) 
+where
+    T: ResizablePty,
+    T::OwnedR: Unpin + Send + 'static,
+    T::OwnedW: Unpin + Send + 'static,
+{
+    let (mut reader, mut writer) = pty.into_split();
 
     let (mut sender, mut receiver) = socket.split();
 
