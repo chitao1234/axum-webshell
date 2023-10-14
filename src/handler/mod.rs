@@ -1,3 +1,5 @@
+pub mod auth;
+
 use std::ops::ControlFlow;
 
 use axum::{
@@ -19,7 +21,7 @@ pub async fn ws_handler(ws: WebSocketUpgrade) -> impl IntoResponse {
     })
 }
 
-async fn handle_socket<T>(pty: T, socket: WebSocket) 
+async fn handle_socket<T>(pty: T, socket: WebSocket)
 where
     T: ResizablePty,
     T::OwnedR: Unpin + Send + 'static,
